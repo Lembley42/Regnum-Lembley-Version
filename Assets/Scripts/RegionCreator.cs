@@ -12,8 +12,7 @@ public class RegionCreator : MonoBehaviour {
 	//Holds Tiles
 
 
-	private int numberOfRegions = 625;
-	//Sets amount of Regions. Needs to be n² (here : 25²)
+	private int numberOfRegions = 1;
 
 
 	void Start () 
@@ -25,19 +24,17 @@ public class RegionCreator : MonoBehaviour {
 	{
 		for(int i = 0; i < numberOfRegions; i++)
 		{
-			var currRegion = new GameObject("Region" + i);
+			var currRegion = GameObject.CreatePrimitive(PrimitiveType.Quad);
+			currRegion.GetComponent<Transform>().localScale += new Vector3(1000,1000,1);
+			var regionPositionX = Mathf.FloorToInt(i%(Mathf.Sqrt(numberOfRegions)));
+			var regionPositionY = Mathf.FloorToInt(i/(Mathf.Sqrt(numberOfRegions)));
+			currRegion.name = ("" + regionPositionX + "," + regionPositionY);
 			currRegion.transform.SetParent(transform);
-			currRegion.AddComponent<RegionInfo>();
-			//Creates n² Regions, sets them as Child of "World" and adds the RegionInfo Component
-			currRegion.GetComponent<RegionInfo>().regionPositionX = Mathf.FloorToInt(i%(Mathf.Sqrt(numberOfRegions)));
-			//Determines x value of the regions position. For the 77th with 25^2 region for example :
-			// 77%25 = 2 (25 goes in 77 3x clean, with 2(!) leftover). X position of the region is therefore 2.
-			currRegion.GetComponent<RegionInfo>().regionPositionY = Mathf.FloorToInt(i/(Mathf.Sqrt(numberOfRegions)));
-			//Determines y value of the regions position. For the 77th with 25^2 region for example : 
-			// 77/25 = 3,08 - rounded down (-> Mathf.FloorToInt) 3. The y position of the region is therefore 3.
-			// Overall it is (2,3).
-			GetComponent<WorldInfo>().regionCoords[Mathf.FloorToInt(i%(Mathf.Sqrt(numberOfRegions))), Mathf.FloorToInt(i/(Mathf.Sqrt(numberOfRegions)))] = currRegion;
-			//Registers the region into the appropiate (see above) position into the regionCoords (see WorldInfo) for general acess where each region is located.
+			currRegion.AddComponent<TileManagement>();
+			currRegion.GetComponent<TileManagement>().regionPositionX = regionPositionX;
+			currRegion.GetComponent<TileManagement>().regionPositionY = regionPositionY;
+			GetComponent<WorldInfo>().regionCoords[regionPositionX, regionPositionY] = currRegion;
+			currRegion.transform.position = new Vector2(regionPositionX*100, regionPositionY*100);
 		}
 	}
 }

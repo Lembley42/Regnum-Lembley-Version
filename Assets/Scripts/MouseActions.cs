@@ -24,7 +24,7 @@ public class MouseActions : MonoBehaviour {
 			ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			if(Physics.Raycast(ray, out hit))
 			{
-
+				Debug.Log(hit.transform.gameObject.name);
 			}
 		}
 	}
