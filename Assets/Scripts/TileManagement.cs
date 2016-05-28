@@ -11,7 +11,7 @@ public class TileManagement : MonoBehaviour {
 	private Color grassColor = new Color(0,255,0);
 	private Color forestColor = new Color(0.2f,0.4f,0);
 	private Color sandColor = new Color(0.95f,0.9f,0);
-	private Color randomColor = new Color(0f,0f,1f);
+	private Color seaColor = new Color(0f,0f,1f);
 
 	public int regionPositionX;
 	public int regionPositionY;
@@ -30,7 +30,7 @@ public class TileManagement : MonoBehaviour {
 
 		xOrg = (int)Random.Range(1,100);
 		yOrg = (int)Random.Range(1,100);
-		scale = Random.Range(2,4);
+		scale = Random.Range(4,5);
 		float y = 0.0F;
 		while (y < regionMap.height) {
 			float x = 0.0F;
@@ -38,21 +38,20 @@ public class TileManagement : MonoBehaviour {
 				float xCoord = xOrg + x / regionMap.width * scale;
 				float yCoord = yOrg + y / regionMap.height * scale;
 				float sample = Mathf.PerlinNoise(xCoord, yCoord);
-				if(sample < 0.2f)
+				if(sample < 0.3f)
 				{
-					pix[(int)(y * regionMap.width + x)] = randomColor;
+					pix[(int)(y * regionMap.width + x)] = seaColor;
 
 				}
-				else if(sample < 0.5f)
+				else if(sample < 0.35f)
+				{
+					pix[(int)(y * regionMap.width + x)] = sandColor;
+				}
+				else if(sample < 0.7f)
 				{
 					pix[(int)(y * regionMap.width + x)] = grassColor;
 				}
-				else if(sample < 0.6f)
-				{
-					pix[(int)(y * regionMap.width + x)] = sandColor;
-
-				}
-				else if (sample < 0.8f)
+				else if (sample < 1.0f)
 				{
 					pix[(int)(y * regionMap.width + x)] = forestColor;
 				}
